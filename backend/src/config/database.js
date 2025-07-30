@@ -22,10 +22,9 @@ const connectDatabase = async () => {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
     
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('Database synchronized.');
-    }
+    // Note: Use migrations instead of sync in production
+    // Run: npx sequelize-cli db:migrate
+    console.log('Database ready. Make sure to run migrations if needed.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
     process.exit(1);
