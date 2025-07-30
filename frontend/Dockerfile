@@ -23,9 +23,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy built application
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Create non-root user
-RUN addgroup -g 1001 -S nginx
-RUN adduser -S nginx -u 1001
+# The nginx user and group already exist in the nginx image
 
 # Expose port
 EXPOSE 3000

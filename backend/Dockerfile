@@ -8,8 +8,12 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
+# Copy source code and startup script
 COPY . .
+COPY start.sh /app/start.sh
+
+# Make startup script executable
+RUN chmod +x /app/start.sh
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
@@ -29,4 +33,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     }).on('error', () => process.exit(1))"
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["sh", "/app/start.sh"]
