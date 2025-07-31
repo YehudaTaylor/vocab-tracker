@@ -1,23 +1,20 @@
-# Fixed Render configuration
+# Minimal Render configuration for debugging
 services:
   - type: web
-    name: vocab-tracker-backend
+    name: vocab-tracker-api
     runtime: node
-    plan: free
+    plan: starter
     rootDir: backend
-    buildCommand: npm ci --omit=dev
+    buildCommand: npm ci --production
     startCommand: node src/server.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: vocab-tracker-db
+          name: vocab-db
           property: connectionString
-      - key: PORT
-        value: 10000
 
 databases:
-  - name: vocab-tracker-db
-    plan: free
-    databaseName: vocab_tracker
+  - name: vocab-db
+    plan: starter
