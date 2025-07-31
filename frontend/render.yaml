@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: vocab-tracker-web
+    runtime: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: build

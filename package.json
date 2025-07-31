@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "A full-stack vocabulary tracker with spaced repetition learning",
   "scripts": {
+    "start": "./start.sh",
+    "build": "./build.sh",
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd frontend && npm install",
     "build-backend": "cd backend && npm run migrate",
