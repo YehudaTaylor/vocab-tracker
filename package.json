@@ -1,0 +1,19 @@
+{
+  "name": "vocab-tracker",
+  "version": "1.0.0",
+  "description": "A full-stack vocabulary tracker with spaced repetition learning",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "build-backend": "cd backend && npm run migrate",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && npm start"
+  },
+  "keywords": ["vocabulary", "translation", "learning", "spaced-repetition"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  }
+}
