@@ -12,6 +12,7 @@ const {
   validateReview,
   validatePagination
 } = require('../middleware/validation');
+const { optionalAuth, extractUser } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -35,11 +36,11 @@ const reviewLimiter = rateLimit({
   }
 });
 
-// Routes
-router.post('/translate', translationLimiter, validateTranslation, translateWord);
-router.get('/history', validatePagination, getTranslationHistory);
-router.get('/review', getWordsForReview);
-router.put('/review/:id', reviewLimiter, validateReview, reviewWord);
+// Routes with optional authentication
+router.post('/translate', optionalAuth, extractUser, translationLimiter, validateTranslation, translateWord);
+router.get('/history', optionalAuth, extractUser, validatePagination, getTranslationHistory);
+router.get('/review', optionalAuth, extractUser, getWordsForReview);
+router.put('/review/:id', optionalAuth, extractUser, reviewLimiter, validateReview, reviewWord);
 router.get('/languages', getSupportedLanguages);
 
 module.exports = router;

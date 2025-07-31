@@ -14,12 +14,14 @@ const translateWord = async (req, res) => {
     }
 
     const { word, targetLanguage = 'he' } = req.body;
+    const userId = req.user ? req.user.id : 'anonymous';
 
-    // Check if translation already exists
+    // Check if translation already exists for this user
     const existingTranslation = await Translation.findOne({
       where: {
         englishWord: word.toLowerCase(),
-        targetLanguage
+        targetLanguage,
+        userId
       }
     });
 
@@ -49,7 +51,8 @@ const translateWord = async (req, res) => {
       translatedWord: translation.translatedText,
       targetLanguage,
       confidence: translation.confidence,
-      nextReview
+      nextReview,
+      userId
     });
 
     res.status(201).json({
@@ -77,8 +80,9 @@ const getTranslationHistory = async (req, res) => {
   try {
     const { page = 1, limit = 20, targetLanguage } = req.query;
     const offset = (page - 1) * limit;
+    const userId = req.user ? req.user.id : 'anonymous';
 
-    const whereClause = {};
+    const whereClause = { userId };
     if (targetLanguage) {
       whereClause.targetLanguage = targetLanguage;
     }
@@ -115,8 +119,10 @@ const getTranslationHistory = async (req, res) => {
 const getWordsForReview = async (req, res) => {
   try {
     const { limit = 10 } = req.query;
+    const userId = req.user ? req.user.id : 'anonymous';
     
     const reviewQuery = SpacedRepetitionSystem.getWordsForReview();
+    reviewQuery.where.userId = userId;
     reviewQuery.limit = parseInt(limit);
 
     const wordsForReview = await Translation.findAll(reviewQuery);

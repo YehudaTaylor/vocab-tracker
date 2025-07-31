@@ -62,6 +62,13 @@ const Translation = sequelize.define('Translation', {
       min: 1,
       max: 5
     }
+  },
+  userId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   }
 }, {
   timestamps: true,
