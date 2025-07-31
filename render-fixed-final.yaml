@@ -1,0 +1,22 @@
+# Single deployment with proper database dependency
+databases:
+  - name: vocab-tracker-database
+    plan: free
+
+services:
+  - type: web
+    name: vocab-tracker-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci --production
+    startCommand: node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vocab-tracker-database  
+          property: connectionString
+      - key: PORT
+        value: 10000

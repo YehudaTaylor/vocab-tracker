@@ -1,0 +1,6 @@
+# Step 1: Deploy database first
+databases:
+  - name: vocab-tracker-db
+    plan: free
+    databaseName: vocab_tracker
+    user: vocab_user
