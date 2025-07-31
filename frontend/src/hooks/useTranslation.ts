@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { translationApi } from '../services/api';
+import { useApiClient } from '../services/apiClient';
 import { TranslationResponse, ApiError } from '../types';
 
 interface UseTranslationResult {
@@ -15,6 +15,7 @@ export const useTranslation = (): UseTranslationResult => {
   const [translation, setTranslation] = useState<TranslationResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const apiClient = useApiClient();
 
   const translateWord = useCallback(async (word: string, targetLanguage: string = 'he') => {
     if (!word.trim()) {
@@ -26,8 +27,11 @@ export const useTranslation = (): UseTranslationResult => {
     setError(null);
 
     try {
-      const result = await translationApi.translateWord(word, targetLanguage);
-      setTranslation(result);
+      const response = await apiClient.post('/translations/translate', {
+        word: word.trim(),
+        targetLanguage
+      });
+      setTranslation(response.data);
     } catch (err) {
       const apiError = err as ApiError;
       setError(apiError.message || 'Failed to translate word');
@@ -35,7 +39,7 @@ export const useTranslation = (): UseTranslationResult => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [apiClient]);
 
   const clearError = useCallback(() => {
     setError(null);

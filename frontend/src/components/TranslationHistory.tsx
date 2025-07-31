@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
-import { translationApi } from '../services/api';
+import { useApiClient } from '../services/apiClient';
 import { Translation } from '../types';
 import { useLanguages } from '../hooks/useLanguages';
 
@@ -17,14 +17,24 @@ const TranslationHistory: React.FC<TranslationHistoryProps> = ({ refreshTrigger 
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   
   const { languages } = useLanguages();
+  const apiClient = useApiClient();
 
   const fetchHistory = async (page: number = 1, language?: string) => {
     try {
       setLoading(true);
-      const response = await translationApi.getTranslationHistory(page, 10, language);
-      setTranslations(response.data.translations);
-      setCurrentPage(response.data.pagination.currentPage);
-      setTotalPages(response.data.pagination.totalPages);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '10',
+      });
+      
+      if (language) {
+        params.append('targetLanguage', language);
+      }
+
+      const response = await apiClient.get(`/translations/history?${params}`);
+      setTranslations(response.data.data.translations);
+      setCurrentPage(response.data.data.pagination.currentPage);
+      setTotalPages(response.data.data.pagination.totalPages);
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to load translation history');
