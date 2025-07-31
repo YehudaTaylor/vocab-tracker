@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { BookOpen, History, Menu, X } from 'lucide-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import TranslationForm from './components/TranslationForm';
 import TranslationHistory from './components/TranslationHistory';
+import UserProfile from './components/UserProfile';
+import LoginButton from './components/LoginButton';
+import AuthenticationGuard from './components/AuthenticationGuard';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'translate' | 'history'>('translate');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth0();
 
   const handleTranslationComplete = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -21,7 +26,8 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AuthenticationGuard>
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,6 +57,11 @@ function App() {
                 );
               })}
             </nav>
+
+            {/* Desktop User Profile */}
+            <div className="hidden md:block">
+              {isAuthenticated ? <UserProfile /> : <LoginButton />}
+            </div>
 
             {/* Mobile menu button */}
             <button
@@ -84,6 +95,11 @@ function App() {
                   </button>
                 );
               })}
+              
+              {/* Mobile User Profile */}
+              <div className="pt-4 border-t border-gray-200 mt-4">
+                {isAuthenticated ? <UserProfile /> : <LoginButton />}
+              </div>
             </div>
           )}
         </div>
@@ -128,7 +144,8 @@ function App() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </AuthenticationGuard>
   );
 }
 
