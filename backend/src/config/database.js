@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 // Use DATABASE_URL for Render, fallback to individual env vars for local dev
-const sequelize = process.env.DATABASE_URL 
+const sequelize = (process.env.DATABASE_URL && process.env.DATABASE_URL !== 'undefined')
   ? new Sequelize(process.env.DATABASE_URL, {
       dialect: 'postgres',
       logging: process.env.NODE_ENV === 'development' ? console.log : false,

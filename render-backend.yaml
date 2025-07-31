@@ -1,14 +1,15 @@
-# Simple Render deployment - Backend only
-# Deploy frontend separately as static site
+# Backend-only deployment for Render
+# This file should be used for the backend service only
 
 services:
   - type: web
-    name: vocab-tracker-backend
+    name: vocab-tracker-api
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install && npm run migrate
-    startCommand: npm start
+    buildCommand: npm install
+    startCommand: npm run migrate && npm start
+    env: node
     envVars:
       - key: NODE_ENV
         value: production
@@ -16,12 +17,8 @@ services:
         fromDatabase:
           name: vocab-tracker-db
           property: connectionString
-      - key: AUTH0_DOMAIN
-        sync: false
-      - key: AUTH0_AUDIENCE  
-        sync: false
-      - key: AUTH0_CLIENT_ID
-        sync: false
+      - key: PORT
+        value: 10000
 
 databases:
   - name: vocab-tracker-db
