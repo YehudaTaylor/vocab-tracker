@@ -1,3 +1,11 @@
+# A vibe code experiment
+Built with Claude Code. 
+
+It works (kinda)(with lots of bugs)[similar)T.ooTHIS,sentence[.
+
+Proof of concept - yes.
+
+
 # Vocab Tracker 📚
 
 A production-grade full-stack web application for translating and tracking vocabulary with spaced repetition learning. Built with modern web technologies including React, TypeScript, Node.js, Express, and PostgreSQL.
